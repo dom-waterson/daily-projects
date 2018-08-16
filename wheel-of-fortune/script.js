@@ -47,9 +47,28 @@ for (let sector = 0; sector < numberOfSectors; sector += 1) {
 
 const circleSprite = new PIXI.Sprite(sectionGraphic.generateCanvasTexture());
 
-wheel.pivot.set(200, 200);
-wheel.position.set(200, 200);
+wheel.pivot.set(250, 250);
+wheel.position.set(250, 250);
 wheel.addChild(circleSprite, textContainer);
+
+wheel.buttonMode = true;
+wheel.interactive = true;
+
+function finalPoisition() {
+  const choosenSector = 2;
+  const sectorsToMinus = numberOfSectors - choosenSector;
+  const rotation = sectorsToMinus * radiansPerSector;
+  return rotation;
+}
+
+wheel.on('pointertap', () => {
+  wheel.rotation = 0;
+  const rotation = piTwo + finalPoisition();
+  const tl = new TimelineMax();
+  tl.to(wheel, 7, { rotation: `+=${rotation}`, ease: Back.easeOut.config(1) });
+  TweenLite.to(tl, 4, { timeScale: 0, ease: Linear.easeNone, delay: 3 });
+});
+
 app.stage.addChild(wheel);
 document.body.appendChild(app.view);
 /* eslint-enable no-undef */

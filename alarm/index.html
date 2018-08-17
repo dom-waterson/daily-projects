@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <link href="style.css" rel="stylesheet">
+    <title>Alarm</title>
+</head>
+
+<body>
+    <div class="timer">
+        <div class="timer-controls">
+            <button data-time="120" class="timer-button">2 Mins</button>
+            <button data-time="300" class="timer-button">5 Mins</button>
+            <button data-time="600" class="timer-button">10 Mins</button>
+            <button data-time="1800" class="timer-button">30 Mins</button>
+            <button data-time="3600" class="timer-button">1 hour</button>
+            <form name="customForm" id="custom">
+                <input type="text" name="minutes" placeholder="Enter Minutes">
+            </form>
+        </div>
+        <div class="display">
+            <h1 class="display-time-left"></h1>
+            <p class="display-end-time"></p>
+        </div>
+    </div>
+    <audio src="alarm-sound.wav"></audio>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>

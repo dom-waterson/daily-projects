@@ -12,18 +12,36 @@
     <div id='app'></div>
 
     <script type='text/babel'>
-        function FriendsList(props){
+        function ActiveFriendsList(props){
             return (
-                <ul>
-                    {props.list.map((name) => (
-                        <li key={name}>
-                            {name}
-                            <button onClick={() => {
-                                props.onRemoveFriend(name)
-                            }}>Remove</button>
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <h2>Active Friends</h2>
+                    <ul>
+                        {props.list.map((name) => (
+                            <li key={name}>
+                                <span>{name}</span>
+                                <button onClick={() => {props.onRemoveFriend(name)}}>Remove</button>
+                                <button onClick={() => {props.onDeactivateFriend(name)}}>Deactivate</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+
+        function InactiveFriendsList(props){
+            return (
+                <div>
+                    <h2>Inactive Friends</h2>
+                    <ul>
+                        {props.list.map((name) => (
+                            <li key={name}>
+                                <span>{name}</span>
+                                <button onClick={() => {props.onActiveFriend(name)}}>Active</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )
         }
 
@@ -31,20 +49,42 @@
             constructor(props) {
                 super(props)
                 this.state = {
-                    friends: ['Dom', 'John', 'Tom'],
+                    inactiveFriends: ['John'],
+                    activeFriends: ['Smith', 'Doe'],
                     input: ''
                 }
 
                 this.handleRemoveFriend = this.handleRemoveFriend.bind(this)
                 this.handleAddFriend = this.handleAddFriend.bind(this)
                 this.updateInput = this.updateInput.bind(this)
+                this.handleDeactivateFriend = this.handleDeactivateFriend.bind(this)
+                this.handleAddActiveFriend = this.handleAddActiveFriend.bind(this)
+                this.handleClearAllFriends = this.handleClearAllFriends.bind(this)
             }
 
             handleAddFriend() {
                 this.setState((currentState) => {
                     return {
-                        friends: currentState.friends.concat([this.state.input]),
+                        activeFriends: currentState.activeFriends.concat([this.state.input]),
                         input: ''
+                    }
+                })
+            }
+
+            handleAddActiveFriend(name) {
+                this.setState((currentState) => {
+                    return {
+                        activeFriends: currentState.activeFriends.concat([name]),
+                        inactiveFriends: currentState.inactiveFriends.filter((friend) => friend !== name)
+                    }
+                })
+            }
+
+            handleDeactivateFriend(name) {
+                this.setState((currentState) => {
+                    return {
+                        inactiveFriends: currentState.inactiveFriends.concat([name]),
+                        activeFriends: currentState.activeFriends.filter((friend) => friend !== name)
                     }
                 })
             }
@@ -52,9 +92,16 @@
             handleRemoveFriend(name) {
                 this.setState((currentState) => {
                     return {
-                        friends: currentState.friends.filter((friend) => friend !== name)
+                        activeFriends: currentState.activeFriends.filter((friend) => friend !== name)
                     }
                 })
+            }
+
+            handleClearAllFriends() {
+                 this.setState({
+                        inactiveFriends: [],
+                        activeFriends: []
+                    })
             }
 
             updateInput(e) {
@@ -69,7 +116,9 @@
                     <div>
                         <input type="text" placeholder="New friend" value={this.state.input} onChange={this.updateInput}/>
                         <button onClick={this.handleAddFriend}>Submit</button>
-                        <FriendsList list={this.state.friends} onRemoveFriend={this.handleRemoveFriend} />
+                        <button onClick={this.handleClearAllFriends}>Clear All</button>
+                        <ActiveFriendsList list={this.state.activeFriends} onRemoveFriend={this.handleRemoveFriend} onDeactivateFriend={this.handleDeactivateFriend}/>
+                        <InactiveFriendsList list={this.state.inactiveFriends} onActiveFriend={this.handleAddActiveFriend}/>
                     </div>
                 )
             }
